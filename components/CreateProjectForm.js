@@ -11,7 +11,6 @@ export default function CreateProjectForm() {
   return (
     <form
       ref={formRef}
-      // We pass the action to a wrapper function to reset the form on success
       action={async (formData) => {
         await createProject(formData);
         formRef.current?.reset();
@@ -47,7 +46,7 @@ export default function CreateProjectForm() {
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
           />
         </div>
-        <SubmitButton /> {/* <-- Use the new button */}
+        <SubmitButton /> 
       </div>
     </form>
   );
