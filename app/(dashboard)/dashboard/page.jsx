@@ -1,6 +1,8 @@
-// file: app/(dashboard)/dashboard/page.js
+// app/(dashboard)/dashboard/page.js
 import { getProjects } from "@/lib/data";
 import CreateProjectForm from "@/components/CreateProjectForm";
+// Import Shadcn Card components
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default async function DashboardPage() {
   const projects = await getProjects();
@@ -13,20 +15,21 @@ export default async function DashboardPage() {
           Here are your current projects.
         </p>
       </div>
- <div className="mb-8">
+
+      <div className="mb-8">
         <CreateProjectForm />
       </div>
+
+      <h2 className="text-xl font-semibold mb-4 mt-8">Your Projects</h2>
+
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {projects.map((project) => (
-          <div
-            key={project.id}
-            className="rounded-lg border bg-white p-6 shadow-sm"
-          >
-            <h2 className="font-bold text-lg">{project.name}</h2>
-            <p className="mt-2 text-sm text-gray-500">
-              {project.description}
-            </p>
-          </div>
+          <Card key={project.id}>
+            <CardHeader>
+              <CardTitle>{project.name}</CardTitle>
+              <CardDescription>{project.description}</CardDescription>
+            </CardHeader>
+          </Card>
         ))}
       </div>
     </div>

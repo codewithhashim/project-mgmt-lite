@@ -1,5 +1,5 @@
 "use client";
-import Button from "@/components/button";
+import { Button } from "@/components/ui/button";
 
 export default function Error ({error, reset}){
     return (
@@ -8,7 +8,7 @@ export default function Error ({error, reset}){
                 Something went wrong!
             </h3>
             <p>{error.message}</p>
-            <Button variant="primary" size="large" onClick={() => reset()}>Try again</Button>
+            {/* <Button variant="primary" size="large" onClick={() => reset()}>Try again</Button> */}
         </div>
     )
 }

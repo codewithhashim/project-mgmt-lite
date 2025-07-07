@@ -1,53 +1,54 @@
-// file: components/CreateProjectForm.js
-"use client"; // <-- Add this directive
+// components/CreateProjectForm.js
+"use client";
 
 import { useRef } from "react";
 import { createProject } from "@/lib/actions";
-import SubmitButton from "./SubmitButton"; // <-- Import the new button
+import SubmitButton from "./SubmitButton";
+// Import Shadcn UI components
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function CreateProjectForm() {
   const formRef = useRef(null);
 
   return (
-    <form
-      ref={formRef}
-      action={async (formData) => {
-        await createProject(formData);
-        formRef.current?.reset();
-      }}
-      className="rounded-lg border bg-white p-6 shadow-sm"
-    >
-      <h2 className="text-lg font-bold">Create a New Project</h2>
-      <div className="mt-4 flex flex-col gap-4">
-        {/* ... input fields for name and description ... */}
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium">
-            Project Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="description"
-            className="block text-sm font-medium"
-          >
-            Description
-          </label>
-          <textarea
-            id="description"
-            name="description"
-            rows={3}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-          />
-        </div>
-        <SubmitButton /> 
-      </div>
-    </form>
+    <Card className="max-w-md mx-auto">
+      <CardHeader>
+        <CardTitle>Create a New Project</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form
+          ref={formRef}
+          action={async (formData) => {
+            await createProject(formData);
+            formRef.current?.reset();
+          }}
+          className="space-y-4" // Tailwind class for vertical spacing
+        >
+          <div>
+            <Label htmlFor="name">Project Name</Label>
+            <Input
+              type="text"
+              id="name"
+              name="name"
+              required
+              className="mt-1"
+            />
+          </div>
+          <div>
+            <Label htmlFor="description">Description</Label>
+            <Textarea
+              id="description"
+              name="description"
+              rows={3}
+              className="mt-1"
+            />
+          </div>
+          <SubmitButton />
+        </form>
+      </CardContent>
+    </Card>
   );
 }

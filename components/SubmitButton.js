@@ -1,18 +1,19 @@
-// file: components/SubmitButton.js
+// components/SubmitButton.js
 "use client";
 
 import { useFormStatus } from "react-dom";
+import { Button } from "@/components/ui/button";
 
 export default function SubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <button
+    <Button
       type="submit"
       disabled={pending}
-      className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-400"
+      className="w-full" // Make it full width
     >
       {pending ? "Creating Project..." : "Create Project"}
-    </button>
+    </Button>
   );
 }
