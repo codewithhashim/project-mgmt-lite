@@ -8,7 +8,7 @@ export default function Error ({error, reset}){
                 Something went wrong!
             </h3>
             <p>{error.message}</p>
-            {/* <Button variant="primary" size="large" onClick={() => reset()}>Try again</Button> */}
+            <Button onClick={()=>reset()}>Try Again</Button>
         </div>
     )
 }
