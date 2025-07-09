@@ -1,0 +1,51 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// User Model
+model User {
+  id        String    @id @default(uuid())
+  name      String?
+  email     String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  projects  Project[]
+  tasks     Task[]
+}
+
+// Project Model
+model Project {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  creatorId String? // Optional: foreign key to User
+  creator   User?    @relation(fields: [creatorId], references: [id])
+
+  tasks Task[] // A project can have many tasks
+}
+
+// Task Model
+model Task {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  status      String   @default("Pending") // e.g., "Pending", "In Progress", "Completed"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  projectId String  // Foreign key to Project
+  project   Project @relation(fields: [projectId], references: [id])
+
+  assignedToId String? // Optional: foreign key to User
+  assignedTo   User?    @relation(fields: [assignedToId], references: [id])
+}
