@@ -1,17 +1,22 @@
-
+// app/(dashboard)/dashboard/page.js
 import { getProjects } from "@/lib/data";
 import CreateProjectForm from "@/components/CreateProjectForm";
 import ProjectCard from "@/components/ProjectCard";
-import PageHeader from "@/components/PageHeader"; 
+import PageHeader from "@/components/PageHeader";
+import { auth } from "@/auth";
 
 export default async function DashboardPage() {
-  const projects = await getProjects();
+  const session = await auth(); // Get session data on the server
+  const projects = await getProjects(); // Your existing project fetch
+
+
+  const userId = session?.user?.id; 
 
   return (
     <div>
       <PageHeader
         title="Dashboard"
-        description="Manage and create your projects here."
+        description={`Welcome, ${session?.user?.name || "Guest"}! Manage your projects here.`}
       />
 
       <div className="mb-8">

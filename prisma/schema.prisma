@@ -11,26 +11,28 @@ datasource db {
 
 // User Model
 model User {
-  id        String    @id @default(uuid())
+  id        String    @id @default(cuid())
   name      String?
   email     String    @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   projects  Project[]
   tasks     Task[]
+  accounts  Account[]
+  Session   Session[]
 }
 
 // Project Model
 model Project {
-  id          String   @id @default(uuid())
-  name        String
-  description String?
+  id               String   @id @default(uuid())
+  name             String
+  description      String?
   expectedDuration Int?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   creatorId String? // Optional: foreign key to User
-  creator   User?    @relation(fields: [creatorId], references: [id])
+  creator   User?   @relation(fields: [creatorId], references: [id])
 
   tasks Task[] // A project can have many tasks
 }
@@ -44,9 +46,44 @@ model Task {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  projectId String  // Foreign key to Project
+  projectId String // Foreign key to Project
   project   Project @relation(fields: [projectId], references: [id])
 
   assignedToId String? // Optional: foreign key to User
-  assignedTo   User?    @relation(fields: [assignedToId], references: [id])
+  assignedTo   User?   @relation(fields: [assignedToId], references: [id])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }
