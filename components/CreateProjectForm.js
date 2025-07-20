@@ -4,6 +4,7 @@
 import { useRef } from "react";
 import { createProject } from "@/lib/actions";
 import SubmitButton from "./SubmitButton";
+import { toast } from "sonner";
 // Import Shadcn UI components
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,6 +24,7 @@ export default function CreateProjectForm() {
           ref={formRef}
           action={async (formData) => {
             await createProject(formData);
+            toast.success("Project created successfully!");
             formRef.current?.reset();
           }}
           className="space-y-4" // Tailwind class for vertical spacing

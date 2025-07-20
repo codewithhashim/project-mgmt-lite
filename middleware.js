@@ -1,40 +1,54 @@
-// middleware.js
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 
 export default withAuth(
-  // `withAuth` augments the Next.js request with the user's token.
   function middleware(req) {
-    // Example: Only admin users can access /admin
-    // if (req.nextUrl.pathname.startsWith("/admin") && req.nextauth.token?.role !== "admin") {
-    //   return NextResponse.rewrite(new URL("/auth/denied", req.url));
-    // }
+    const { pathname } = req.nextUrl;
+    const { token } = req.nextauth;
 
-    // Example: If trying to access /sign-in while logged in, redirect to dashboard
-    if (req.nextUrl.pathname.startsWith("/sign-in") && req.nextauth.token) {
+    // If user is authenticated and trying to access auth pages, redirect to dashboard
+    if (token && (pathname === "/sign-in" || pathname === "/sign-up")) {
       return NextResponse.redirect(new URL("/dashboard", req.url));
     }
 
-    // Allow access to the route if authenticated
     return NextResponse.next();
   },
   {
     callbacks: {
-      authorized: ({ token }) => {
-        // If there is a token, the user is authorized.
-        // This protects all paths listed in `matcher`.
-        return !!token;
+      authorized: ({ token, req }) => {
+        const { pathname } = req.nextUrl;
+        
+        // Public routes that don't require authentication
+        const publicRoutes = ["/", "/sign-in", "/sign-up"];
+        if (publicRoutes.includes(pathname)) {
+          return true;
+        }
+
+        // Protected routes require authentication
+        const protectedRoutes = ["/dashboard", "/settings"];
+        if (protectedRoutes.some(route => pathname.startsWith(route))) {
+          return !!token;
+        }
+
+        return true;
       },
     },
     pages: {
-      signIn: "/sign-in", // Redirect unauthenticated users to this page
+      signIn: "/sign-in",
     },
   }
 );
 
 export const config = {
   matcher: [
-    "/dashboard/:path*", // Protect all routes under /dashboard
-    "/settings/:path*",  // Protect all routes under /settings
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public folder
+     */
+    "/((?!api|_next/static|_next/image|favicon.ico|public).*)",
   ],
 };

@@ -2,10 +2,39 @@
 "use client"; // The layout needs to be a client component for signOut
 
 import Link from "next/link";
-import { signOut } from "next-auth/react"; // Import signOut
+import { signOut, useSession } from "next-auth/react"; // Import useSession
 import { Button } from "@/components/ui/button"; // Import Shadcn Button
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function DashboardLayout({ children }) {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === "loading") return; // Still loading
+    
+    if (status === "unauthenticated") {
+      console.log("User not authenticated, redirecting to sign-in");
+      router.push("/sign-in");
+      return;
+    }
+  }, [status, router]);
+
+  // Show loading state while checking authentication
+  if (status === "loading") {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-lg">Loading...</div>
+      </div>
+    );
+  }
+
+  // Don't render layout if not authenticated (will redirect)
+  if (status === "unauthenticated") {
+    return null;
+  }
+
   return (
     <section className="flex min-h-screen">
       {/* Sidebar */}

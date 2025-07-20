@@ -2,6 +2,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import SessionProvider from "@/components/auth/SessionProvider"; // Import the session provider
+import { Toaster } from "@/components/ui/sonner"; // Global toaster for notifications
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,9 +15,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <SessionProvider> {/* Wrap children with SessionProvider */}
+        <SessionProvider>
           {children}
         </SessionProvider>
+        {/* Toast notifications */}
+        <Toaster richColors />
       </body>
     </html>
   );
