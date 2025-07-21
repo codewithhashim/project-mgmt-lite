@@ -1,17 +1,34 @@
 // components/ProjectCard.js
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import Link from "next/link"; // Import Link
+import { Button } from "@/components/ui/button"; // Import Button
 
 export default function ProjectCard({ project }) {
   return (
-    <Link href={`/dashboard/projects/${project.id}`} className="block hover:shadow-lg transition-shadow duration-200">
-      <Card>
-        <CardHeader>
-          <CardTitle>{project.name}</CardTitle>
-          <CardDescription>{project.description}</CardDescription>
-        </CardHeader>
-        {/* Optional: Add more content or actions if needed in CardContent */}
-      </Card>
-    </Link>
+    <Card>
+      <CardHeader>
+        <CardTitle>{project.name}</CardTitle>
+        <CardDescription>{project.description}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        {project.status && (
+          <p className="text-sm font-semibold text-blue-600 bg-blue-100 px-2 py-1 rounded-full inline-block">
+            {project.status}
+          </p>
+        )}
+      </CardContent>
+      <CardFooter>
+        <Link href={`/dashboard/projects/${project.id}`}>
+          <Button variant="outline">View Details</Button>
+        </Link>
+      </CardFooter>
+    </Card>
   );
 }
