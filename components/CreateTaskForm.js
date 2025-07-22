@@ -19,16 +19,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"; // You'll need to add this Shadcn component
+} from "@/components/ui/select"; 
 
-// Add Select component from Shadcn if not already added:
-// npx shadcn-ui@latest add select
-
-// Add Toast component for notifications (optional, but good for UX)
-// npx shadcn-ui@latest add toast
-// npx shadcn-ui@latest add sonner (alternative, simpler toast)
-// You'll also need to add a <Toaster /> component in your app/layout.js or similar root.
-// For now, we'll just console.log the messages.
 
 export default function CreateTaskForm({ projectId, users }) {
   // useFormState is for Server Action response handling
