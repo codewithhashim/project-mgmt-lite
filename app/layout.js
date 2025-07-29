@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
         <SessionProvider>
           {children}
         </SessionProvider>
-        {/* Toast notifications */}
+        
         <Toaster richColors />
       </body>
     </html>
